@@ -1,3 +1,9 @@
+/*
+ * Author : Hank
+ * Instructions:
+ * 1) Upload the code
+ * 2) Press the button on the Maker Uno (the one below the reset button) and observe the motor spinning
+*/
 #define BUTTON    2
 #define L298N_ENA 5
 #define L298N_ENB 6
