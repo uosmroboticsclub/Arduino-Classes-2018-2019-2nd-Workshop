@@ -12,12 +12,12 @@
 #define L298N_IN3 10
 #define L298N_IN4 11
 
-int state;
+int state; //state of the robot, moving, reverse,turn left,turn right etc
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(BUTTON, INPUT_PULLUP);
+  pinMode(BUTTON, INPUT_PULLUP);   //enable the button at pin 2 (only works for pin 2)
   pinMode(L298N_ENA, OUTPUT);
   pinMode(L298N_ENB, OUTPUT);
   pinMode(L298N_IN1, OUTPUT);
@@ -26,11 +26,14 @@ void setup()
   pinMode(L298N_IN4, OUTPUT);
 }
 
+/*
+Makes the robot move forward with motor driver as the head of direction
+*/
 void robotForward(int robotSpeed)
 {
-  analogWrite(L298N_ENA, robotSpeed);
-  digitalWrite(L298N_IN1, LOW);
-  digitalWrite(L298N_IN2, HIGH);
+  analogWrite(L298N_ENA, robotSpeed); //To change speed on one of the motors
+  digitalWrite(L298N_IN1, LOW);       //To change direction on one of the motors
+  digitalWrite(L298N_IN2, HIGH);      //To change direction on one of the motors as well, IN1 and IN2 are relative to each other
 
   analogWrite(L298N_ENB, robotSpeed);
   digitalWrite(L298N_IN3, HIGH);
@@ -94,22 +97,22 @@ void robotBrake()
 
 void loop()
 {
-  if (digitalRead(BUTTON) == LOW) {
-    delay(200);
-    if(state==5){
+  if (digitalRead(BUTTON) == LOW) {   //when button is pressed, 0v signal is sent
+    delay(200);					      //a delay is added to avoid unnessary repeating signals when button is pressed as it is mechanical switch, also known as signal bouncing.
+    if(state==5){                     //reset 
       state = 0;
     }
     else{
-      state++;
+      state++;						  //increment by 1
     }
   }
   else {
-    switch (state) {
-      case 0:
+    switch (state) {                  //another method instead of writing if else statements, cases look more tidy
+      case 0:                         //if state == 0
       robotStop();
       Serial.println(state);
       break;
-      case 1:
+      case 1:						  //if state == 1
       robotForward(200);
       Serial.println(state);
       break;
@@ -129,7 +132,7 @@ void loop()
       robotBrake();
       Serial.println(state);
       break;
-      default:
+      default:                        //if state is neither of the values 1 to 5
       robotStop();
       Serial.println(state);
       break;
